@@ -1,2 +1,21 @@
+from openai import OpenAI
+from config import GROQ_API_KEY
+
+client = OpenAI(
+    api_key=GROQ_API_KEY,
+    base_url="https://api.groq.com/openai/v1"
+)
+
 def send_to_llm(prompt):
-    return "LLM Response:" + prompt
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
+
+    return response.choices[0].message.content

@@ -13,11 +13,11 @@ def home():
 
 @app.post("/chat")
 def chat(request: PromptRequest):
+    try:
+        response = send_to_llm(request.prompt)
+        return {"response": response}
 
-    response = send_to_llm(request.prompt)
-
-    return {
-        "response": response
-    }
-
+    except Exception as e:
+        print(e)
+        return {"error": str(e)}
 
