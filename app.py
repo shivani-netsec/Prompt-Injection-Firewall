@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from proxy import send_to_llm
 from pydantic import BaseModel
+from detector.patterns import detect_patterns
+from scoring.engine import calculate_score
 
 app = FastAPI()
 
@@ -13,11 +15,23 @@ def home():
 
 @app.post("/chat")
 def chat(request: PromptRequest):
-    try:
-        response = send_to_llm(request.prompt)
-        return {"response": response}
 
-    except Exception as e:
-        print(e)
-        return {"error": str(e)}
+    matches = detect_patterns(request.prompt)
+
+    score = calculate_score(matches)
+
+    if score >= 50:
+
+        return {
+            "status": "Blocked",
+            "reason": "Prompt Injection Detected",
+            "matched_patterns": matches
+        }
+
+    response = send_to_llm(request.prompt)
+
+    return {
+        "status": "Allowed",
+        "response": response
+    }
 
