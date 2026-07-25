@@ -21,6 +21,6 @@ def detect_patterns(prompt):
 
     for pattern in SUSPICIOUS_PATTERNS:
         if pattern in prompt:
-            marches.append(pattern)
-    return False
+            matches.append(pattern)
+    return matches
     
