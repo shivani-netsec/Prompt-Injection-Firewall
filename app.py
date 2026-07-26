@@ -5,6 +5,7 @@ from detector.patterns import detect_patterns
 from scoring.engine import calculate_score
 from heuristic.analyzer import heuristic_score
 from sanitizer.clean import sanitize_prompt
+from logger.audit import log_request
 
 app = FastAPI()
 
@@ -25,37 +26,60 @@ def chat(request: PromptRequest):
     score = pattern_score + behavior_score
     clean_prompt, removed = sanitize_prompt(request.prompt)
 
-    # if score >= 50:
-
-    #     return {
-    #         "status": "Blocked",
-    #         "risk_score": score,
-    #         "matched_patterns": matches,
-    #         "heuristic_reasons": reasons
-    #     }
-
     if clean_prompt == "":
+
+        log_request(
+            request.prompt,
+            clean_prompt,
+            score,
+            "Blocked",
+            matches,
+            reasons,
+            removed
+    )
+
         return {
-        "status": "Blocked",
-        "reason": "Prompt became empty after sanitization.",
-        "risk_score": score,
-        "removed_phrases": removed,
-        "heuristic_reasons": reasons
+            "status": "Blocked",
+            "reason": "Prompt became empty after sanitization.",
+            "risk_score": score,
+            "removed_phrases": removed,
+            "heuristic_reasons": reasons
     }
 
 
     if score >= 70:
+
+        log_request(
+            request.prompt,
+            clean_prompt,
+            score,
+            "Blocked",
+            matches,
+            reasons,
+            removed
+    )
+
         return {
             "status": "Blocked",
             "risk_score": score,
             "matched_patterns": matches,
             "heuristic_reasons": reasons,
             "removed_phrases": removed
-        }
+    }
          
     elif score >= 40:
 
         response = send_to_llm(clean_prompt)
+
+        log_request(
+            request.prompt,
+            clean_prompt,
+            score,
+            "Sanitized",
+            matches,
+            reasons,
+            removed
+        )
 
 
         return {
@@ -72,13 +96,22 @@ def chat(request: PromptRequest):
 
         response = send_to_llm(request.prompt)
 
-        return {
-            "status": "Allowed",
-            "risk_score": score,
-            "matched_patterns": matches,
-            "heuristic_reasons": reasons,
-            "removed_phrases": removed,
-            "response": response
-        }
-    
+        log_request(
+        request.prompt,
+        clean_prompt,
+        score,
+        "Sanitized",
+        matches,
+        reasons,
+        removed
+    )
 
+    return {
+        "status": "Sanitized",
+        "risk_score": score,
+        "matched_patterns": matches,
+        "heuristic_reasons": reasons,
+        "removed_phrases": removed,
+        "sanitized_prompt": clean_prompt,
+        "response": response
+}
