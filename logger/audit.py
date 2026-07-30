@@ -1,4 +1,5 @@
 from datetime import datetime
+import uuid 
 
 LOG_FILE = "logs/firewall.log"
 
@@ -10,12 +11,19 @@ def log_request(
     decision,
     matched_patterns,
     heuristic_reasons,
-    removed_phrases
+    removed_phrases,
+    processing_time
 ):
 
     print("Logging request...")
+
+    event_id = f"PIF-{str(uuid.uuid4())[:8].upper()}"
     
     with open(LOG_FILE, "a", encoding="utf-8") as file:
+
+        file.write(f"Event ID: {event_id}\n")
+
+        file.write(f"Processing Time: {processing_time} seconds\n")
 
         file.write(f"Timestamp: {datetime.now()}\n")
 
