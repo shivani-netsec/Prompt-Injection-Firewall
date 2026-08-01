@@ -1,17 +1,16 @@
-SUSPICIOUS_PATTERNS =[
-    "ignore previous instructions",
-    "ignore all previous instructions",
-    "forget previous instructions",
-    "forget everything",
-    "system prompt",
-    "reveal system prompt",
-    "developer mode",
-    "jailbreak",
-    "bypass",
-    "act as",
-    "do anything now",
-    "dan mode",
-    "override instructions"
+import re
+
+
+SUSPICIOUS_PATTERNS = [
+    r"ignore\s+(all\s+)?previous\s+instructions?",
+    r"forget\s+(everything|previous\s+instructions?)",
+    r"reveal\s+(the\s+)?system\s+(prompt|information)",
+    r"developer\s+mode",
+    r"jailbreak",
+    r"override\s+instructions?",
+    r"act\s+as",
+    r"do\s+anything\s+now",
+    r"bypass"
 ]
 
 def detect_patterns(prompt):
@@ -20,7 +19,7 @@ def detect_patterns(prompt):
     matches = []
 
     for pattern in SUSPICIOUS_PATTERNS:
-        if pattern in prompt:
+        if re.search(pattern, prompt):
             matches.append(pattern)
     return matches
     

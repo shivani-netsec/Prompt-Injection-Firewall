@@ -10,6 +10,9 @@ from logger.audit import log_request
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from dashboard.dashboard import templates
+from utils.risk import classify_risk
+
+
 
 app = FastAPI()
 
@@ -33,19 +36,13 @@ def dashboard(request: Request):
 @app.post("/chat")
 def chat(request: PromptRequest):
     start_time = time.perf_counter()
-
     matches = detect_patterns(request.prompt)
-
     pattern_score = calculate_score(matches)
     behavior_score, reasons = heuristic_score(request.prompt)
     score = pattern_score + behavior_score
+    severity, decision = classify_risk(score)
 
-    if score >= 70:
-        severity = "Critical"
-    elif score >= 40:
-        severity = "Medium"
-    else:
-        severity = "Low"
+
 
     if score >= 70:
         explanation = "Prompt blocked because it contains high-risk prompt injection indicators."

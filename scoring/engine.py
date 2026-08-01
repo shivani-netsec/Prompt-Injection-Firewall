@@ -1,18 +1,15 @@
 PATTERN_SCORES = {
-    "ignore previous instructions": 40,
-    "ignore all previous instructions": 40,
-    "forget previous instructions": 35,
-    "forget everything": 30,
-    "system prompt": 25,
-    "reveal system prompt": 40,
-    "developer mode": 25,
-    "jailbreak": 50,
-    "bypass": 20,
-    "act as": 15,
-    "do anything now": 45,
-    "dan mode": 50,
-    "override instructions": 40
+    r"ignore\s+(all\s+)?previous\s+instructions?": 40,
+    r"forget\s+(everything|previous\s+instructions?)": 35,
+    r"reveal\s+(the\s+)?system\s+(prompt|information)": 40,
+    r"developer\s+mode": 25,
+    r"jailbreak": 50,
+    r"override\s+instructions?": 40,
+    r"act\s+as": 15,
+    r"do\s+anything\s+now": 45,
+    r"bypass": 20
 }
+
 
 
 def calculate_score(matches):
