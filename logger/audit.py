@@ -14,18 +14,20 @@ def log_request(
     removed_phrases,
     processing_time
 ):
-
+    event_id = f"PIF-{str(uuid.uuid4())[:8].upper()}"
+    
     print("Logging request...")
 
-    event_id = f"PIF-{str(uuid.uuid4())[:8].upper()}"
     
     with open(LOG_FILE, "a", encoding="utf-8") as file:
 
+        file.write("=" * 60 + "\n")
+
         file.write(f"Event ID: {event_id}\n")
 
-        file.write(f"Processing Time: {processing_time} seconds\n")
-
         file.write(f"Timestamp: {datetime.now()}\n")
+
+        file.write(f"Processing Time: {processing_time} seconds\n")
 
         file.write(f"Original Prompt:\n{original_prompt}\n\n")
 

@@ -39,6 +39,14 @@ def chat(request: PromptRequest):
     pattern_score = calculate_score(matches)
     behavior_score, reasons = heuristic_score(request.prompt)
     score = pattern_score + behavior_score
+
+    if score >= 70:
+        severity = "Critical"
+    elif score >= 40:
+        severity = "Medium"
+    else:
+        severity = "Low"
+
     clean_prompt, removed = sanitize_prompt(request.prompt)
 
     if clean_prompt == "":
@@ -58,6 +66,7 @@ def chat(request: PromptRequest):
   
         return {
             "status": "Blocked",
+            "severity": severity,
             "reason": "Prompt became empty after sanitization.",
             "risk_score": score,
             "processing_time": processing_time,
@@ -83,6 +92,7 @@ def chat(request: PromptRequest):
         
         return {
             "status": "Blocked",
+            "severity": severity,
             "risk_score": score,
             "matched_patterns": matches,
             "heuristic_reasons": reasons,
@@ -108,6 +118,7 @@ def chat(request: PromptRequest):
 
         return {
             "status": "Sanitized",
+            "severity": severity,
             "risk_score": score,
             "matched_patterns": matches,
             "heuristic_reasons": reasons,
@@ -139,6 +150,7 @@ def chat(request: PromptRequest):
     return {
         "status": "Allowed",
         "risk_score": score,
+        "severity": severity,
         "matched_patterns": matches,
         "heuristic_reasons": reasons,
         "removed_phrases": removed,
