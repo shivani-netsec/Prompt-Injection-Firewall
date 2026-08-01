@@ -75,6 +75,7 @@ def chat(request: PromptRequest):
             "reason": "Prompt became empty after sanitization.",
             "risk_score": score,
             "explanation": explanation,
+            "matched_patterns": matches,
             "processing_time": processing_time,
             "removed_phrases": removed,
             "heuristic_reasons": reasons
@@ -103,6 +104,7 @@ def chat(request: PromptRequest):
             "risk_score": score,
             "explanation": explanation,
             "matched_patterns": matches,
+            "matched_patterns": matches,
             "heuristic_reasons": reasons,
             "removed_phrases": removed,
             "processing_time": processing_time
@@ -130,6 +132,7 @@ def chat(request: PromptRequest):
             "severity": severity,
             "risk_score": score,
             "explanation": explanation,
+            "matched_patterns": matches,
             "matched_patterns": matches,
             "heuristic_reasons": reasons,
             "removed_phrases": removed,
@@ -163,6 +166,7 @@ def chat(request: PromptRequest):
         "risk_score": score,
         "severity": severity,
         "explanation": explanation,
+        "matched_patterns": matches,
         "matched_patterns": matches,
         "heuristic_reasons": reasons,
         "removed_phrases": removed,

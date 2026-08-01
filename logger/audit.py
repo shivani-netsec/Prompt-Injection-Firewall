@@ -35,7 +35,7 @@ def log_request(
         file.write(f"Sanitized Prompt:\n{sanitized_prompt}\n\n")
 
         file.write(f"Risk Score: {risk_score}\n")
-        
+
         file.write(f"Severity: {severity}\n")
 
         file.write(f"Decision: {decision}\n\n")
@@ -43,9 +43,8 @@ def log_request(
         file.write(f"Matched Patterns:\n")
 
         if matched_patterns:
-            for pattern in matched_patterns:
-                file.write(f"-{pattern}\n")
-
+            for rule in matched_patterns:
+                file.write(f"- {rule['id']} | {rule['name']}\n")
         else:
             file.write("None\n")
 
