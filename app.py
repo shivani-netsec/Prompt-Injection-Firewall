@@ -47,6 +47,13 @@ def chat(request: PromptRequest):
     else:
         severity = "Low"
 
+    if score >= 70:
+        explanation = "Prompt blocked because it contains high-risk prompt injection indicators."
+    elif score >= 40:
+        explanation = "Potential prompt injection attempt detected. Unsafe instructions were removed before forwarding the request."
+    else:
+        explanation = "No prompt injection indicators detected."
+
     clean_prompt, removed = sanitize_prompt(request.prompt)
 
     if clean_prompt == "":
@@ -70,6 +77,7 @@ def chat(request: PromptRequest):
             "severity": severity,
             "reason": "Prompt became empty after sanitization.",
             "risk_score": score,
+            "explanation": explanation,
             "processing_time": processing_time,
             "removed_phrases": removed,
             "heuristic_reasons": reasons
@@ -96,6 +104,7 @@ def chat(request: PromptRequest):
             "status": "Blocked",
             "severity": severity,
             "risk_score": score,
+            "explanation": explanation,
             "matched_patterns": matches,
             "heuristic_reasons": reasons,
             "removed_phrases": removed,
@@ -123,6 +132,7 @@ def chat(request: PromptRequest):
             "status": "Sanitized",
             "severity": severity,
             "risk_score": score,
+            "explanation": explanation,
             "matched_patterns": matches,
             "heuristic_reasons": reasons,
             "removed_phrases": removed,
@@ -155,6 +165,7 @@ def chat(request: PromptRequest):
         "status": "Allowed",
         "risk_score": score,
         "severity": severity,
+        "explanation": explanation,
         "matched_patterns": matches,
         "heuristic_reasons": reasons,
         "removed_phrases": removed,
