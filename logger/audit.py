@@ -8,6 +8,7 @@ def log_request(
     original_prompt,
     sanitized_prompt,
     risk_score,
+    severity,
     decision,
     matched_patterns,
     heuristic_reasons,
@@ -34,6 +35,8 @@ def log_request(
         file.write(f"Sanitized Prompt:\n{sanitized_prompt}\n\n")
 
         file.write(f"Risk Score: {risk_score}\n")
+        
+        file.write(f"Severity: {severity}\n")
 
         file.write(f"Decision: {decision}\n\n")
 
