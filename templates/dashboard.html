@@ -1,52 +1,111 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <title>Prompt Injection Firewall Dashboard</title>
 
-<title>Prompt Injection Firewall</title>
+    <style>
 
-<style>
+        body{
+            font-family:Arial,Helvetica,sans-serif;
+            background:#f4f4f4;
+            margin:30px;
+        }
 
-body{
-    font-family:Arial;
-    margin:40px;
-    background:#f5f5f5;
-}
+        h1{
+            text-align:center;
+        }
 
-h1{
-    color:#333;
-}
+        .cards{
+            display:flex;
+            gap:20px;
+            justify-content:center;
+            margin-top:30px;
+        }
 
-.card{
+        .card{
+            width:220px;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,.1);
+            text-align:center;
+        }
 
-    background:white;
+        .card h2{
+            margin:0;
+            color:#555;
+        }
 
-    padding:20px;
+        .number{
+            font-size:40px;
+            margin-top:15px;
+            font-weight:bold;
+        }
 
-    border-radius:10px;
+        table{
+            width:100%;
+            margin-top:40px;
+            border-collapse:collapse;
+            background:white;
+        }
 
-    width:500px;
+        th,td{
+            border:1px solid #ddd;
+            padding:12px;
+            text-align:center;
+        }
 
-    box-shadow:0px 0px 10px gray;
+        th{
+            background:#333;
+            color:white;
+        }
 
-}
-
-</style>
+    </style>
 
 </head>
 
 <body>
 
-<div class="card">
+<h1>Prompt Injection Firewall Dashboard</h1>
 
-<h1>Prompt Injection Firewall</h1>
+<div class="cards">
 
-<h2>Admin Dashboard</h2>
+    <div class="card">
+        <h2>Total Requests</h2>
+        <div class="number">{{ stats.total }}</div>
+    </div>
 
-<p>Dashboard is running successfully.</p>
+    <div class="card">
+        <h2>Allowed</h2>
+        <div class="number">{{ stats.allowed }}</div>
+    </div>
+
+    <div class="card">
+        <h2>Sanitized</h2>
+        <div class="number">{{ stats.sanitized }}</div>
+    </div>
+
+    <div class="card">
+        <h2>Blocked</h2>
+        <div class="number">{{ stats.blocked }}</div>
+    </div>
 
 </div>
 
-</body>
+<table>
 
+<tr>
+    <th>Event ID</th>
+    <th>Severity</th>
+    <th>Decision</th>
+    <th>Processing Time</th>
+</tr>
+
+<tr>
+    <td colspan="4">No incidents yet</td>
+</tr>
+
+</table>
+
+</body>
 </html>
