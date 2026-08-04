@@ -22,6 +22,12 @@
             margin-top:30px;
         }
 
+        .chart-container{
+            width:300px;
+            height:300px;
+            margin:30px auto;
+}
+
         .card{
             width:220px;
             background:white;
@@ -89,6 +95,8 @@
 
     </style>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
@@ -119,6 +127,12 @@
 
 </div>
 
+<h2 style="text-align:center;">Request Distribution</h2>
+
+<div class="chart-container">
+    <canvas id="requestChart" width="300" height="300"></canvas>
+</div>
+
 <table>
 
 <tr>
@@ -130,44 +144,39 @@
 
 {% if incidents %}
 
-    {% for incident in incidents %}
+{% for incident in incidents %}
 
     <tr>
-      <td>
-
-            {% if incident.severity == "Critical" %}
-                <span class="blocked">{{ incident.severity }}</span>
-
-            {% elif incident.severity == "Medium" %}
-                <span class="sanitized">{{ incident.severity }}</span>
-
-            {% else %}
-                <span class="allowed">{{ incident.severity }}</span>
-
-            {% endif %}
-
+    
+        <td>{{ incident.event_id }}</td>
+    
+        <td>
+        {% if incident.severity == "Critical" %}
+            <span class="blocked">{{ incident.severity }}</span>
+        {% elif incident.severity == "Medium" %}
+            <span class="sanitized">{{ incident.severity }}</span>
+        {% else %}
+            <span class="allowed">{{ incident.severity }}</span>
+        {% endif %}
+      
         </td>
 
         <td>
+         {% if incident.decision == "Blocked" %}
+            <span class="blocked">{{ incident.decision }}</span>
+        {% elif incident.decision == "Sanitized" %}
+            <span class="sanitized">{{ incident.decision }}</span>
+        {% else %}
+            <span class="allowed">{{ incident.decision }}</span>
+        {% endif %}
+    </td>
 
-            {% if incident.decision == "Blocked" %}
-                <span class="blocked">{{ incident.decision }}</span>
 
-            {% elif incident.decision == "Sanitized" %}
-                <span class="sanitized">{{ incident.decision }}</span>
+    <td>{{ incident.processing_time }}</td>
 
-            {% else %}
-                <span class="allowed">{{ incident.decision }}</span>
-
-            {% endif %}
-
-        </td>
-        <td>{{ incident.processing_time }}</td>
-    </tr>
-
-     {% endfor %}
-
-{% else %}
+</tr>
+    {% endfor %}
+    {% else %}
 
 <tr>
     <td colspan="4">No incidents found</td>
@@ -176,6 +185,42 @@
 {% endif %}
 
 </table>
+
+<script>
+const ctx = document.getElementById('requestChart');
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Allowed', 'Sanitized', 'Blocked'],
+        datasets: [{
+            data: [
+                {{ stats.allowed }},
+                {{stats.sanitized }},
+                {{ stats.blocked }}
+            ],
+            backgroundColor: [
+                '#28a745',
+                '#ffc107',
+                '#dc3545'
+            ]
+        }]
+    },
+    options: {
+    responsive: false,
+    maintainAspectRatio: false,
+    aspectRatio:1,
+
+    plugins: {
+        legend: {
+            position: 'bottom'
+        }
+    }
+}
+
+});
+
+</script>
 
 </body>
 </html>
