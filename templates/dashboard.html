@@ -59,6 +59,33 @@
             background:#333;
             color:white;
         }
+        tr:nth-child(even){
+            background:#f9f9f9;
+        }
+
+        .allowed{
+            background:#28a745;
+            color:white;
+            padding:6px 12px;
+            border-radius:20px;
+            font-weight:bold;
+        }
+
+        .sanitized{
+            background:#ffc107;
+            color:black;
+            padding:6px 12px;
+            border-radius:20px;
+            font-weight:bold;
+        }
+
+        .blocked{
+            background:#dc3545;
+            color:white;
+            padding:6px 12px;
+            border-radius:20px;
+            font-weight:bold;
+        }
 
     </style>
 
@@ -101,9 +128,52 @@
     <th>Processing Time</th>
 </tr>
 
+{% if incidents %}
+
+    {% for incident in incidents %}
+
+    <tr>
+      <td>
+
+            {% if incident.severity == "Critical" %}
+                <span class="blocked">{{ incident.severity }}</span>
+
+            {% elif incident.severity == "Medium" %}
+                <span class="sanitized">{{ incident.severity }}</span>
+
+            {% else %}
+                <span class="allowed">{{ incident.severity }}</span>
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            {% if incident.decision == "Blocked" %}
+                <span class="blocked">{{ incident.decision }}</span>
+
+            {% elif incident.decision == "Sanitized" %}
+                <span class="sanitized">{{ incident.decision }}</span>
+
+            {% else %}
+                <span class="allowed">{{ incident.decision }}</span>
+
+            {% endif %}
+
+        </td>
+        <td>{{ incident.processing_time }}</td>
+    </tr>
+
+     {% endfor %}
+
+{% else %}
+
 <tr>
-    <td colspan="4">No incidents yet</td>
+    <td colspan="4">No incidents found</td>
 </tr>
+
+{% endif %}
 
 </table>
 

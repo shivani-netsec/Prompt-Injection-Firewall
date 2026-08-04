@@ -11,7 +11,7 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 from dashboard.dashboard import templates
 from utils.risk import classify_risk
-from dashboard.parser import get_dashboard_stats
+from dashboard.parser import get_dashboard_stats, get_recent_incidents
 
 
 
@@ -28,12 +28,14 @@ def home():
 def dashboard(request: Request):
 
     stats = get_dashboard_stats()
+    incidents = get_recent_incidents()
 
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
         context={
-            "stats": stats
+            "stats": stats,
+            "incidents": incidents
         }
     )
 
