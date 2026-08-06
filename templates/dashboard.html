@@ -1,99 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Prompt Injection Firewall Dashboard</title>
 
-    <style>
-
-        body{
-            font-family:Arial,Helvetica,sans-serif;
-            background:#f4f4f4;
-            margin:30px;
-        }
-
-        h1{
-            text-align:center;
-        }
-
-        .cards{
-            display:flex;
-            gap:20px;
-            justify-content:center;
-            margin-top:30px;
-        }
-
-        .chart-container{
-            width:300px;
-            height:300px;
-            margin:30px auto;
-}
-
-        .card{
-            width:220px;
-            background:white;
-            padding:20px;
-            border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,.1);
-            text-align:center;
-        }
-
-        .card h2{
-            margin:0;
-            color:#555;
-        }
-
-        .number{
-            font-size:40px;
-            margin-top:15px;
-            font-weight:bold;
-        }
-
-        table{
-            width:100%;
-            margin-top:40px;
-            border-collapse:collapse;
-            background:white;
-        }
-
-        th,td{
-            border:1px solid #ddd;
-            padding:12px;
-            text-align:center;
-        }
-
-        th{
-            background:#333;
-            color:white;
-        }
-        tr:nth-child(even){
-            background:#f9f9f9;
-        }
-
-        .allowed{
-            background:#28a745;
-            color:white;
-            padding:6px 12px;
-            border-radius:20px;
-            font-weight:bold;
-        }
-
-        .sanitized{
-            background:#ffc107;
-            color:black;
-            padding:6px 12px;
-            border-radius:20px;
-            font-weight:bold;
-        }
-
-        .blocked{
-            background:#dc3545;
-            color:white;
-            padding:6px 12px;
-            border-radius:20px;
-            font-weight:bold;
-        }
-
-    </style>
+    <link rel="stylesheet" href="/static/css/style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -101,126 +16,248 @@
 
 <body>
 
-<h1>Prompt Injection Firewall Dashboard</h1>
+<div class="container">
+    <header class="header">
 
-<div class="cards">
+        <div>
 
-    <div class="card">
-        <h2>Total Requests</h2>
-        <div class="number">{{ stats.total }}</div>
-    </div>
+            <h1>Prompt Injection Firewall</h1>
 
-    <div class="card">
-        <h2>Allowed</h2>
-        <div class="number">{{ stats.allowed }}</div>
-    </div>
+            <p class="subtitle">
+                Security Operations Center Dashboard
+            </p>
 
-    <div class="card">
-        <h2>Sanitized</h2>
-        <div class="number">{{ stats.sanitized }}</div>
-    </div>
+        </div>
 
-    <div class="card">
-        <h2>Blocked</h2>
-        <div class="number">{{ stats.blocked }}</div>
-    </div>
+        <div class="status">
+
+            <span class="online-dot"></span>
+
+            System Online
+
+        </div>
+
+    </header>
+
+    <section class="cards">
+
+        <div class="card total">
+
+            <h3>Total Requests</h3>
+
+            <p>{{ stats.total }}</p>
+
+        </div>
+
+        <div class="card allowed">
+
+            <h3>Allowed</h3>
+
+            <p>{{ stats.allowed }}</p>
+
+        </div>
+
+        <div class="card sanitized">
+
+            <h3>Sanitized</h3>
+
+            <p>{{ stats.sanitized }}</p>
+
+        </div>
+
+        <div class="card blocked">
+
+            <h3>Blocked</h3>
+
+            <p>{{ stats.blocked }}</p>
+
+        </div>
+
+    </section>
+
+
+    <section class="dashboard-grid">
+
+        <div class="panel">
+
+            <h2>Request Distribution</h2>
+
+            <canvas id="requestChart"></canvas>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>Firewall Summary</h2>
+
+            <div class="summary">
+
+                <p><strong>Total Requests:</strong> {{ stats.total }}</p>
+
+                <p><strong>Allowed:</strong> {{ stats.allowed }}</p>
+
+                <p><strong>Sanitized:</strong> {{ stats.sanitized }}</p>
+
+                <p><strong>Blocked:</strong> {{ stats.blocked }}</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="search-section">
+
+        <h2>Search Incident</h2>
+
+        <form action="/dashboard" method="GET">
+
+            <input
+                type="text"
+                name="event_id"
+                placeholder="Enter Event ID..."
+                value="{{ event_id if event_id else '' }}"
+            >
+
+            <button type="submit">
+
+                Search
+
+            </button>
+
+        </form>
+
+    </section>
+
+
+
+    <section class="panel">
+
+        <h2>Recent Security Events</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Event ID</th>
+
+                    <th>Severity</th>
+
+                    <th>Decision</th>
+
+                    <th>Processing Time</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% if incidents %}
+
+                {% for incident in incidents %}
+
+                <tr>
+
+                    <td>{{ incident.event_id }}</td>
+
+                    <td>
+
+                        {% if incident.severity == "Critical" %}
+
+                            <span class="badge critical">
+                                {{ incident.severity }}
+                            </span>
+
+                        {% elif incident.severity == "Medium" %}
+
+                            <span class="badge medium">
+                                {{ incident.severity }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge low">
+                                {{ incident.severity }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if incident.decision == "Blocked" %}
+
+                            <span class="badge critical">
+                                {{ incident.decision }}
+                            </span>
+
+                        {% elif incident.decision == "Sanitized" %}
+
+                            <span class="badge medium">
+                                {{ incident.decision }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge low">
+                                {{ incident.decision }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ incident.processing_time }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="4">
+
+                        No incidents found.
+
+                    </td>
+
+                </tr>
+
+            {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </section>
 
 </div>
-
-<h2 style="text-align:center;">Request Distribution</h2>
-
-<div class="chart-container">
-    <canvas id="requestChart" width="300" height="300"></canvas>
-</div>
-
-<table>
-
-<tr>
-    <th>Event ID</th>
-    <th>Severity</th>
-    <th>Decision</th>
-    <th>Processing Time</th>
-</tr>
-
-{% if incidents %}
-
-{% for incident in incidents %}
-
-    <tr>
-    
-        <td>{{ incident.event_id }}</td>
-    
-        <td>
-        {% if incident.severity == "Critical" %}
-            <span class="blocked">{{ incident.severity }}</span>
-        {% elif incident.severity == "Medium" %}
-            <span class="sanitized">{{ incident.severity }}</span>
-        {% else %}
-            <span class="allowed">{{ incident.severity }}</span>
-        {% endif %}
-      
-        </td>
-
-        <td>
-         {% if incident.decision == "Blocked" %}
-            <span class="blocked">{{ incident.decision }}</span>
-        {% elif incident.decision == "Sanitized" %}
-            <span class="sanitized">{{ incident.decision }}</span>
-        {% else %}
-            <span class="allowed">{{ incident.decision }}</span>
-        {% endif %}
-    </td>
-
-
-    <td>{{ incident.processing_time }}</td>
-
-</tr>
-    {% endfor %}
-    {% else %}
-
-<tr>
-    <td colspan="4">No incidents found</td>
-</tr>
-
-{% endif %}
-
-</table>
 
 <script>
-const ctx = document.getElementById('requestChart');
 
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: ['Allowed', 'Sanitized', 'Blocked'],
-        datasets: [{
-            data: [
-                {{ stats.allowed }},
-                {{stats.sanitized }},
-                {{ stats.blocked }}
-            ],
-            backgroundColor: [
-                '#28a745',
-                '#ffc107',
-                '#dc3545'
-            ]
-        }]
-    },
-    options: {
-    responsive: false,
-    maintainAspectRatio: false,
-    aspectRatio:1,
+const chartLabels = [
+    "Allowed",
+    "Sanitized",
+    "Blocked"
+];
 
-    plugins: {
-        legend: {
-            position: 'bottom'
-        }
-    }
-}
-
-});
+const chartData = [
+    {{ stats.allowed }},
+    {{ stats.sanitized }},
+    {{ stats.blocked }}
+];
 
 </script>
+
+<script src="/static/js/dashboard.js"></script>
 
 </body>
 </html>

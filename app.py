@@ -12,10 +12,13 @@ from fastapi.responses import HTMLResponse
 from dashboard.dashboard import templates
 from utils.risk import classify_risk
 from dashboard.parser import get_dashboard_stats, get_recent_incidents
+from fastapi.staticfiles import StaticFiles
 
 
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class PromptRequest(BaseModel):
     prompt: str
@@ -25,17 +28,27 @@ def home():
     return{"message":"Prompt Injection Api Working"}
 
 @app.get("/dashboard", response_class=HTMLResponse)
-def dashboard(request: Request):
+def dashboard(request: Request, event_id: str = ""):
+
 
     stats = get_dashboard_stats()
     incidents = get_recent_incidents()
+
+    if event_id:
+        incidents = [
+            incident
+            for incident in incidents
+            if incident["event_id"] == event_id
+        ]
+
 
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
         context={
             "stats": stats,
-            "incidents": incidents
+            "incidents": incidents,
+            "event_id": event_id
         }
     )
 
