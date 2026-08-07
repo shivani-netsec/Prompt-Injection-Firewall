@@ -139,6 +139,17 @@ Dashboard
 http://127.0.0.1:8000/dashboard
 ```
 
----
+## Dashboard
+
+The dashboard provides:
+
+- Total Requests
+- Allowed Requests
+- Sanitized Requests
+- Blocked Requests
+- Request Distribution Pie Chart
+- Incident Search by Event ID
+- Security Event Table
+
 
 
