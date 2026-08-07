@@ -19,3 +19,34 @@ The project combines **pattern-based detection**, **heuristic analysis**, **prom
 - Search incidents by Event ID
 - Responsive dark-themed dashboard
 
+## Architecture
+
+```
+                User Prompt
+                     │
+                     ▼
+          Pattern Detection Engine
+                     │
+                     ▼
+          Heuristic Analysis Engine
+                     │
+                     ▼
+             Risk Score Engine
+                     │
+                     ▼
+           Prompt Sanitization
+                     │
+          ┌──────────┴──────────┐
+          │                     │
+          ▼                     ▼
+     Block Request         Forward to LLM
+          │                     │
+          └──────────┬──────────┘
+                     ▼
+              Audit Logger
+                     │
+                     ▼
+          Dashboard & Analytics
+```
+
+
