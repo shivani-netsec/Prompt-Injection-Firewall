@@ -151,5 +151,19 @@ The dashboard provides:
 - Incident Search by Event ID
 - Security Event Table
 
+## Audit Log
 
+Every request is recorded with:
+
+- Event ID
+- Timestamp
+- Original Prompt
+- Sanitized Prompt
+- Risk Score
+- Severity
+- Decision
+- Matched Patterns
+- Heuristic Reasons
+- Removed Phrases
+- Processing Time
 
