@@ -49,4 +49,36 @@ The project combines **pattern-based detection**, **heuristic analysis**, **prom
           Dashboard & Analytics
 ```
 
+## Project Structure
+```
+Prompt-Injection-Firewall/
+│
+├── app.py
+├── proxy.py
+├── detector/
+│   └── patterns.py
+├── heuristic/
+│   └── analyzer.py
+├── scoring/
+│   └── engine.py
+├── sanitizer/
+│   └── clean.py
+├── logger/
+│   └── audit.py
+├── dashboard/
+│   ├── dashboard.py
+│   └── parser.py
+├── templates/
+│   └── dashboard.html
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── dashboard.js
+├── logs/
+│   └── firewall.log
+├── requirements.txt
+└── README.md
+```
+
 
