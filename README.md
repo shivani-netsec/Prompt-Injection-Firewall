@@ -167,3 +167,12 @@ Every request is recorded with:
 - Removed Phrases
 - Processing Time
 
+## Tech Stack
+
+- Python
+- FastAPI
+- HTML
+- CSS
+- JavaScript
+- Chart.js
+- Jinja2
