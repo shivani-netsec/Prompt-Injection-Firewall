@@ -81,4 +81,64 @@ Prompt-Injection-Firewall/
 └── README.md
 ```
 
+## Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/shivani-netsec/Prompt-Injection-Firewall.git
+```
+
+Move into the project
+
+```bash
+cd Prompt-Injection-Firewall
+```
+
+Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+Activate it
+
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+### Linux / macOS
+
+```bash
+source venv/bin/activate
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application
+
+```bash
+uvicorn app:app --reload
+```
+
+Open
+
+```
+http://127.0.0.1:8000
+```
+
+Dashboard
+
+```
+http://127.0.0.1:8000/dashboard
+```
+
+---
+
 
